@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
-             version="2.2">
+	version="2.2">
 
-    <persistence-unit name="complaints-management" transaction-type="RESOURCE_LOCAL">
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>com.example.model.User</class>
-        <class>com.example.util.PasswordConverter</class>
+	<persistence-unit name="complaints-management"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>com.example.model.User</class>
+		<class>com.example.model.Role</class>
+		<class>com.example.model.UserRole</class>
+		<class>com.example.util.PasswordConverter</class>
 
-        <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/complaints_management"/>
-            <property name="javax.persistence.jdbc.user" value="complaint_user"/>
-            <property name="javax.persistence.jdbc.password" value="Pass@123"/>
+		<properties>
+			<property name="javax.persistence.jdbc.driver"
+				value="com.mysql.cj.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:mysql://localhost:3306/complaints_management" />
+			<property name="javax.persistence.jdbc.user"
+				value="complaint_user" />
+			<property name="javax.persistence.jdbc.password"
+				value="Pass@123" />
 
-            <!-- Schema generation properties -->
-            <property name="eclipselink.ddl-generation" value="create-tables"/>
-            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-        </properties>
-    </persistence-unit>
+			<!-- Schema generation properties -->
+			<property name="eclipselink.ddl-generation"
+				value="create-tables" />
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="database" />
+		</properties>
+	</persistence-unit>
 </persistence>

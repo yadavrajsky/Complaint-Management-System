@@ -20,7 +20,7 @@ public class PasswordConverter implements AttributeConverter<String, String> {
         return dbData;
     }
 
-    private String hashPassword(String password) {
+    public static String hashPassword(String password) {
         try {
             // Create MessageDigest instance for SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -34,7 +34,7 @@ public class PasswordConverter implements AttributeConverter<String, String> {
             // Return hashed password
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
     }
