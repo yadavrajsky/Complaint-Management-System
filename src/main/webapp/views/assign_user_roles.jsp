@@ -34,10 +34,15 @@
                 <select id="roleId" name="roleId" required class="mt-1 p-2 w-full border border-gray-300 rounded-md">
                     <%
                         List<Role> roles = (List<Role>) request.getAttribute("roles");
+                        if (roles.isEmpty()) {
+                    %>
+                    <option value="" disabled selected>No Roles found</option>
+                    <% } else {
                         for (Role role : roles) {
                     %>
                     <option value="<%= role.getId() %>"><%= role.getRole() %></option>
-                    <% } %>
+                    <% }
+                    } %>
                 </select>
             </div>
             <div>
@@ -65,28 +70,37 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 <%
-                    List<UserRole> userRoles = (List<UserRole>) request.getAttribute("userRoles");
-                    for (UserRole userRole : userRoles) {
-                %>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= userRole.getUser().getName() %> (<%= userRole.getUser().getEmail() %>)
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= userRole.getRole().getRole() %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right">
-                        <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="updateUpdatedModalFormFields('<%= userRole.getUser().getId() %>', '<%= userRole.getUser().getName() %>')">
-                            Update
-                        </button>
-                        <form action="assign_user_roles" method="post" style="display:inline;">
-                            <input type="hidden" name="userId" value="<%= userRole.getUser().getId() %>">
-                            <input type="hidden" name="userRoleId" value="<%= userRole.getRole().getId() %>">
-                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md" name="action" value="delete">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                <% } %>
+                        List<UserRole> userRoles = (List<UserRole>) request.getAttribute("userRoles");
+                        if (userRoles.isEmpty()) {
+                    %>
+                    <tr>
+                        <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
+                            No users associated with some role found
+                        </td>
+                    </tr>
+                    <% } else {
+                        for (UserRole userRole : userRoles) {
+                    %>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <%= userRole.getUser().getName() %> (<%= userRole.getUser().getEmail() %>)
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <%= userRole.getRole().getRole() %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="updateUpdatedModalFormFields('<%= userRole.getUser().getId() %>', '<%= userRole.getUser().getName() %>')">
+                                Update
+                            </button>
+                            <form action="assign_user_roles" method="post" style="display:inline;">
+                                <input type="hidden" name="userId" value="<%= userRole.getUser().getId() %>">
+                                <input type="hidden" name="userRoleId" value="<%= userRole.getRole().getId() %>">
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md" name="action" value="delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }
+                    } %>
             </tbody>
         </table>
     </div>

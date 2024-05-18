@@ -40,10 +40,16 @@
                 <select id="createdForUserId" name="createdForUserId" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
                     <%
                     List<User> users = new UserService().findAllUsers();
-                    for (User u : users) {
+                    if (users.isEmpty()) {
+                    %>
+                    <option value="" disabled>No users available</option>
+                    <%
+                    } else {
+                        for (User u : users) {
                     %>
                     <option value="<%=u.getId()%>"><%=u.getName()%> (<%=u.getEmail()%>)</option>
                     <%
+                        }
                     }
                     %>
                 </select>
@@ -69,7 +75,7 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created On</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <% if (isAdmin) { %>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assign to</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned to</th>
                     <% } %>
                     <% if (isAdmin || (permission != null && permission.getRole() != null)) { %>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
@@ -81,7 +87,7 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 <%
                 List<Complain> complains = (List<Complain>) request.getAttribute("complains");
-                if (complains != null) {
+                if (complains != null && complains.size() > 0){
                     for (Complain complain : complains) {
                         if (complain == null)
                             continue;
@@ -95,7 +101,7 @@
                         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                         LocalDateTime createdOnDateTime = complain.getCreatedOnDateTime();
                         String createdOn = createdOnDateTime.format(dateTimeFormatter);
-                        out.print(createdOn);
+                        out.println(createdOn);
                         %>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap"><%=complain.getStatus() %></td>
@@ -118,7 +124,14 @@
                     </td>
                     <% } %>
                     <% if (isAdmin || (permission != null && permission.getRole() != null)) { %>
-                    <td class="px-6 py-4 whitespace-nowrap"><%=complain.getCreatedByUser().getName()%></td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span class="font-semibold"><%=complain.getCreatedByUser().getName()%></span>
+                                <span class="text-gray-500"><%=complain.getCreatedByUser().getEmail()%></span>
+                                <span class="text-gray-500"><%=complain.getCreatedByUser().getPhone()%></span>
+                                <a href="mailto:<%=complain.getCreatedForUser().getEmail()%>" class="text-blue-500">Send Email</a>
+                            </div>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex flex-col">
                             <span class="font-semibold"><%=complain.getCreatedForUser().getName()%></span>

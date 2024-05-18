@@ -10,15 +10,11 @@
 					<h1
 						class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Complaint
 						Management System</h1>
-					<p class="mb-8 leading-relaxed">Our Complaint Management System
-						allows users to raise complaints, which are then assigned to
-						engineers by the admin. The assigned engineers can update the
-						status of the complaints, ensuring a smooth and efficient
-						resolution process.</p>
+					<p class="mb-8 leading-relaxed">Our Complaint Management System allows users to submit complaints, which are then assigned to different management roles by the admin. The assigned roles can update the status of the complaints based on their designated permissions, ensuring a smooth and efficient resolution process.</p>
 					<div class="flex justify-center">
-						<button
+						<a href="login"
 							class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Get
-							Started</button>
+							Started</a>
 					</div>
 				</div>
 			</div>

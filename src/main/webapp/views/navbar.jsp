@@ -47,16 +47,16 @@
                                     List<UserRole> userRoles = userService.findUserRoles(loggedInUser);
                                     if (userRoles != null && !userRoles.isEmpty()) {
                                         for (UserRole userRole : userRoles) {
-                                            out.println("<span class='badge text-gray-100 bg-blue-500'>" + userRole.getRole().getRole() + "</span> ");
+                                            %>
+                                            <span class="block text-sm text-gray-100 truncate w-full text-center"><strong><%=userRole.getRole().getRole() %></strong></span>
+                                            <%
                                         }
                                     }
                                 %>
                             <% } %>
                         </div>
                         <ul class="py-2" aria-labelledby="user-menu-button">
-                            <li><a href="dashboard"
-                                   class="block px-4 py-2 text-sm text-white hover:bg-gray-100 hover:text-gray-900 ">Dashboard</a></li>
-                            <li><a href="logout"
+                            <li class="text-center"><a href="logout"
                                    class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-100 hover:text-gray-900 ">Sign out</a></li>
                         </ul>
                     </div>
@@ -79,7 +79,7 @@
         </div>
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
             <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
-                <li class="text-center"><a href="" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a></li>
+                <li class="text-center"><a href="<%= request.getContextPath() %>/" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a></li>
 				<% if (loggedInUser != null && loggedInUser.isAdmin()) { %>
 					<li class="text-center"><a href="roles" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Roles</a></li>
 				<li class="text-center"><a href="assign_user_roles" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Assign Roles</a></li>
@@ -97,7 +97,7 @@
     <!-- mobile-menu  -->
     <div class="items-center justify-between w-full md:flex md:w-auto md:order-1" id="navbar-mobile" style="display: none;">
         <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 justify-center">
-            <li class="text-center"><a href="" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a></li>
+            <li class="text-center"><a href="<%= request.getContextPath() %>/" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a></li>
 			<% if (loggedInUser != null && loggedInUser.isAdmin()) { %>
 				<li class="text-center"><a href="roles" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Roles</a></li>
 				<li class="text-center"><a href="assign_user_roles" class="block py-2 px-3 text-gray-100 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Assign Roles</a></li>

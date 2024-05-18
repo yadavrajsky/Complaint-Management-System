@@ -16,7 +16,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-  <div>
+  <div class="min-h-screen">
+
+    <div>
     <!-- Success Notification -->
     <div class="alert" id="successNotification" style="display: none">
       <div class="bg-green-500 text-white p-2 rounded" id="successMessageContainer"></div>
@@ -29,6 +31,9 @@
     <jsp:include page="/views/navbar.jsp" />
     <jsp:include page="${body}" />
   </div>
+</div>
+<jsp:include page="/views/footer.jsp" />
+
   <script>
 
     // Function to show success notification

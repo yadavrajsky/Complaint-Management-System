@@ -22,8 +22,13 @@
                                 .noneMatch(permission -> permission.getRole().getId() == role.getId()))
                             .collect(Collectors.toList());
                     %>
-                    <% for (Role role : roles) { %>
-                    <option value="<%= role.getId() %>"><%= role.getRole() %></option>
+
+                    <% if (roles.isEmpty()) { %>
+                        <option value="" disabled>No roles available</option>
+                    <% } else { %>
+                        <% for (Role role : roles) { %>
+                            <option value="<%= role.getId() %>"><%= role.getRole() %></option>
+                        <% } %>
                     <% } %>
                 </select>
             </div>
@@ -76,36 +81,40 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                <%
-                    for (Permission permission : permissions) {
-                %>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= permission.getRole().getRole() %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= permission.canView() ? "Yes" : "No" %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= permission.canCreate() ? "Yes" : "No" %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= permission.canUpdate() ? "Yes" : "No" %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <%= permission.canDelete() ? "Yes" : "No" %>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right">
-                        <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="updatePermission('<%= permission.getRole().getId() %>','<%= permission.canView() %>','<%= permission.canCreate() %>','<%= permission.canUpdate() %>','<%= permission.canDelete() %>')">
-                            Update
-                        </button>
-                        </button>
-                        <form action="permissions" method="post" style="display:inline;">
-                            <input type="hidden" name="roleId" value="<%= permission.getRole().getId() %>">
-                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md" name="action" value="delete">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+
+                <% if (permissions.isEmpty()) { %>
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center">No permissions available</td>
+                    </tr>
+                <% } else { %>
+                    <% for (Permission permission : permissions) { %>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <%= permission.getRole().getRole() %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <%= permission.canView() ? "Yes" : "No" %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <%= permission.canCreate() ? "Yes" : "No" %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <%= permission.canUpdate() ? "Yes" : "No" %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <%= permission.canDelete() ? "Yes" : "No" %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="updatePermission('<%= permission.getRole().getId() %>','<%= permission.canView() %>','<%= permission.canCreate() %>','<%= permission.canUpdate() %>','<%= permission.canDelete() %>')">
+                                    Update
+                                </button>
+                                <form action="permissions" method="post" style="display:inline;">
+                                    <input type="hidden" name="roleId" value="<%= permission.getRole().getId() %>">
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md" name="action" value="delete">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
                 <% } %>
             </tbody>
         </table>
