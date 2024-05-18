@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * Entity implementation class for Entity: Role
@@ -29,6 +30,9 @@ public class Role implements Serializable {
 		super();
 	}
 
+	@OneToOne(mappedBy = "role")
+    private Permission permission;
+
 	public Role(String role) {
 		this.role = role;
 	}
@@ -49,6 +53,13 @@ public class Role implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public Permission getPermission() {
+		return permission;
+	}
+	public void setPermission(Permission permission) {
+		this.permission = permission;
 	}
 
 }

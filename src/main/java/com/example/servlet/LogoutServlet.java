@@ -22,6 +22,7 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             // Invalidate the session, effectively logging out the user
+        	 request.getSession(false).removeAttribute("loggedInUser");
             request.getSession(false).invalidate();
             
             // Redirect to the login page

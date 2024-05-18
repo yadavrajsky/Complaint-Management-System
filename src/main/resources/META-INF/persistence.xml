@@ -8,9 +8,11 @@
 	<persistence-unit name="complaints-management"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>com.example.model.User</class>
+		<class>com.example.model.Permission</class>
 		<class>com.example.model.Role</class>
+		<class>com.example.model.User</class>
 		<class>com.example.model.UserRole</class>
+		<class>com.example.model.Complain</class>
 		<class>com.example.util.PasswordConverter</class>
 
 		<properties>

@@ -20,9 +20,9 @@ public class LoginServlet extends HttpServlet {
                 String password = request.getParameter("password");
         try {
             // Check if user is already authenticated
-            if (request.getSession().getAttribute("loggedInUser") != null) {
+            if (request.getSession(false).getAttribute("loggedInUser") != null) {
                 // Redirect to dashboard
-                request.getRequestDispatcher("/dashboard").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/dashboard");
                 return;
             }
             // Authenticate user using UserService or any authentication service
@@ -30,8 +30,9 @@ public class LoginServlet extends HttpServlet {
             if (user!=null) {
                 // Set user session
                 request.getSession().setAttribute("loggedInUser", user);
-                // Redirect to dashboard or home page
-                request.getRequestDispatcher("/dashboard").forward(request, response);
+                // Redirect to dashboard 
+                response.sendRedirect(request.getContextPath() + "/dashboard");
+
             } else {
                 // If authentication fails, set error message
                 request.setAttribute("errorMessage", "Invalid email or password");
@@ -44,7 +45,7 @@ public class LoginServlet extends HttpServlet {
         } catch (Exception e) {
             // Handle exceptions
             // e.printStackTrace();
-            request.setAttribute("errorMessage", "An error occurred while processing your request");
+            request.setAttribute("errorMessage", "An error occurred "+e.toString());
             request.setAttribute("body", "/views/login.jsp");
             request.setAttribute("email", email);
             request.setAttribute("password", password);

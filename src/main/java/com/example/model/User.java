@@ -23,15 +23,17 @@ public class User {
     @Column(nullable = false,unique=true)
     private String email;
 
-    @Convert(converter = PasswordConverter.class)
-    @Column(nullable = false)
-    private String password;
 
     @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
     private String address;
+
+    @Convert(converter = PasswordConverter.class)
+    @Column(nullable = false)
+    private String password;
+
 
     @Column(nullable = false)
     private boolean isAdmin;

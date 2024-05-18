@@ -6,18 +6,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import com.example.model.User;
-import com.example.model.UserRole;
+import com.example.model.Role;
 import com.example.util.JPAUtil;
 
+public class RoleService {
 
-public class UserService {
-    public void registerUser(User user) {
+    public void registerRole(Role role) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.persist(user);
+            entityManager.persist(role);
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {
@@ -28,44 +27,24 @@ public class UserService {
             entityManager.close();
         }
     }
-    public User findUserByEmail(String email) {
+
+    public Role findRoleById(Long id) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
-            // Create a JPQL query to find the user by email
-            String jpql = "SELECT u FROM User u WHERE u.email = :email";
-            TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
-            query.setParameter("email", email);
-            // Execute the query and retrieve the user
-            return query.getSingleResult();
+            return entityManager.find(Role.class, id);
         } catch (Exception e) {
             // e.printStackTrace();
-            return null; // Return null if user is not found or an error occurs
+            return null;
         } finally {
             entityManager.close();
         }
     }
 
-    public List<UserRole> findUserRoles(User user) {
+    public List<Role> findAllRoles() {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
-            // Create a JPQL query to find the roles by user
-            String jpql = "SELECT ur FROM UserRole ur WHERE ur.user = :user";
-            TypedQuery<UserRole> query = entityManager.createQuery(jpql, UserRole.class);
-            query.setParameter("user", user);
-            // Execute the query and retrieve the roles
-            return query.getResultList();
-        } catch (Exception e) {
-            // e.printStackTrace();
-            return null; // Return null if roles are not found or an error occurs
-        } finally {
-            entityManager.close();
-        }
-    }
-	public List<User> findAllUsers() {
-        EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
-        try {
-            String jpql = "SELECT ur FROM User ur";
-            TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+            String jpql = "SELECT  r FROM Role r";
+            TypedQuery<Role> query = entityManager.createQuery(jpql, Role.class);
             return query.getResultList();
         } catch (Exception e) {
             // e.printStackTrace();
@@ -73,18 +52,37 @@ public class UserService {
         } finally {
             entityManager.close();
         }
+    }
 
-	}
-
-    public User findUserById(Long userId) {
+    public void deleteRole(Role role) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
         try {
-            // Find the user by their ID
-            return entityManager.find(User.class, userId);
+            transaction.begin();
+            entityManager.remove(entityManager.merge(role));
+            transaction.commit();
         } catch (Exception e) {
-            // Handle exceptions or logging here if needed
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             // e.printStackTrace();
-            return null; // Return null if user is not found or an error occurs
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void updateRole(Role role) {
+        EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.merge(role);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            // e.printStackTrace();
         } finally {
             entityManager.close();
         }
