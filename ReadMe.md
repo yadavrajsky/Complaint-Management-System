@@ -2,6 +2,19 @@
 
 Our Complaint Management System allows users to submit complaints, which are then assigned to different management roles by the admin. The assigned roles can update the status of the complaints based on their designated permissions, ensuring a smooth and efficient resolution process.
 
+![image](https://github.com/yadavrajsky/Complaint-Management-System/assets/70022991/3746b815-391b-4646-8723-f6b3ef062abd)
+
+![image](https://github.com/yadavrajsky/Complaint-Management-System/assets/70022991/d22dc926-1529-4df6-9a3d-4ab5d2b39b59)
+
+![image](https://github.com/yadavrajsky/Complaint-Management-System/assets/70022991/9bad9fa3-361f-4f0a-b932-6691a0257018)
+
+![image](https://github.com/yadavrajsky/Complaint-Management-System/assets/70022991/0f826a84-20f4-4d55-9412-db9a845e3f56)
+
+![image](https://github.com/yadavrajsky/Complaint-Management-System/assets/70022991/0612d97b-627d-4f5c-8bc0-6225dcde012a)
+
+![image](https://github.com/yadavrajsky/Complaint-Management-System/assets/70022991/7e547a61-f661-45e9-b0db-458105ba9141)
+
+
 ## 📝 Prerequisites
 
 - **☕ JDK 11**: Ensure that JDK 11 is installed on your system.
