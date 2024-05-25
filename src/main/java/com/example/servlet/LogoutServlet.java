@@ -29,12 +29,11 @@ public class LogoutServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
         } catch (Exception e) {
             // Handle exceptions, if any
-            // e.printStackTrace();
+//             e.printStackTrace();
             // You can also forward to an error page if needed
             // request.getRequestDispatcher("/views/error.jsp").forward(request, response);
-            request.setAttribute("errorMessage", e.toString());
-            request.setAttribute("body", "/views/dashboard.jsp");
-            request.getRequestDispatcher("/views/base.jsp").forward(request, response);
+//            request.setAttribute("errorMessage", e.toString());
+            response.sendRedirect(request.getContextPath() + "/manage_complains");
         }
     }
 }

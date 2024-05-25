@@ -21,47 +21,46 @@
     %>
 
     <!-- Create Complaint Form -->
-    <%
-    if (isAdmin || (permission != null && permission.canCreate())) {
-    %>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Create Complaint</h2>
-        <form action="manage_complains" method="post" class="space-y-4">
-            <div>
-                <label for="complainType" class="block text-sm font-medium text-gray-700">Complaint Type</label>
-                <input type="text" id="complainType" name="complainType" required class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+ 
+
+            <%
+            if (isAdmin || (permission == null || permission.canCreate())) {
+            %>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Create Complaint</h2>
+                <form action="manage_complains" method="post" class="space-y-4">
+                    <div>
+                        <label for="complainType" class="block text-sm font-medium text-gray-700">Complaint Type</label>
+                        <input type="text" id="complainType" name="complainType" required class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label for="complainDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="complainDescription" name="complainDescription" required class="mt-1 p-2 w-full border border-gray-300 rounded-md"></textarea>
+                    </div>
+                    <% if (isAdmin || ( permission!=null && permission.canCreate())) { %>
+                    <div>
+                        <label for="createdForUserId" class="block text-sm font-medium text-gray-700">Created For User ID</label>
+                        <select id="createdForUserId" name="createdForUserId" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+                            <% List<User> users = new UserService().findAllUsers();
+                            if (users.isEmpty()) { %>
+                            <option value="" disabled>No users available</option>
+                            <% } else {
+                                for (User u : users) { %>
+                            <option value="<%=u.getId()%>"><%=u.getName()%> (<%=u.getEmail()%>)</option>
+                            <% }
+                            } %>
+                        </select>
+                    </div>
+                    <% } %>
+                    <div>
+                        <button type="submit" name="action" value="create" class="bg-blue-500 text-white px-4 py-2 rounded-md">Create Complaint</button>
+                    </div>
+                </form>
             </div>
-            <div>
-                <label for="complainDescription" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea id="complainDescription" name="complainDescription" required class="mt-1 p-2 w-full border border-gray-300 rounded-md"></textarea>
-            </div>
-            <div>
-                <label for="createdForUserId" class="block text-sm font-medium text-gray-700">Created For User ID</label>
-                <select id="createdForUserId" name="createdForUserId" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
-                    <%
-                    List<User> users = new UserService().findAllUsers();
-                    if (users.isEmpty()) {
-                    %>
-                    <option value="" disabled>No users available</option>
-                    <%
-                    } else {
-                        for (User u : users) {
-                    %>
-                    <option value="<%=u.getId()%>"><%=u.getName()%> (<%=u.getEmail()%>)</option>
-                    <%
-                        }
-                    }
-                    %>
-                </select>
-            </div>
-            <div>
-                <button type="submit" name="action" value="create" class="bg-blue-500 text-white px-4 py-2 rounded-md">Create Complaint</button>
-            </div>
-        </form>
-    </div>
-    <%
-    }
-    %>
+            <%
+            }
+            %>
+      
 
     <!-- Complaints List -->
     <div class="bg-white p-6 rounded-lg shadow-md mt-6">

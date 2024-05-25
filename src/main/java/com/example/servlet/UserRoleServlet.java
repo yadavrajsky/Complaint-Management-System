@@ -2,6 +2,7 @@ package com.example.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.model.Role;
 import com.example.model.User;
@@ -110,8 +111,8 @@ public class UserRoleServlet extends HttpServlet {
 
     private void handleAssignRole(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long userId = Long.valueOf(request.getParameter("userId"));
-        Long roleId = Long.valueOf(request.getParameter("roleId"));
+        UUID userId = UUID.fromString(request.getParameter("userId"));
+        UUID roleId = UUID.fromString(request.getParameter("roleId"));
 
         User user = userService.findUserById(userId);
         Role role = roleService.findRoleById(roleId);
@@ -134,8 +135,8 @@ public class UserRoleServlet extends HttpServlet {
 
     private void handleUpdateRole(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long userId = Long.valueOf(request.getParameter("userId"));
-        Long roleId = Long.valueOf(request.getParameter("roleId"));
+                UUID userId = UUID.fromString(request.getParameter("userId"));
+                UUID roleId = UUID.fromString(request.getParameter("roleId"));
         UserRole userRole = userRoleService.findUserRoleByUserId(userId);
         Role role = roleService.findRoleById(roleId);
         if (userRole != null && role != null) {
@@ -151,8 +152,8 @@ public class UserRoleServlet extends HttpServlet {
 
     private void handleDeleteRole(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long userId = Long.valueOf(request.getParameter("userId"));
-        Long roleId = Long.valueOf(request.getParameter("userRoleId"));
+                UUID userId = UUID.fromString(request.getParameter("userId"));
+                UUID roleId = UUID.fromString(request.getParameter("userRoleId"));
         UserRole userRole = userRoleService.findUserRoleByUserIdAndRoleId(userId, roleId);
         if (userRole == null) {
             request.setAttribute("errorMessage", "User accociated with the Role not found.");

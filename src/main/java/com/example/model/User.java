@@ -1,39 +1,41 @@
 package com.example.model;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.UUID;
 
-import com.example.util.PasswordConverter;
+import com.example.util.PasswordUtil;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false,unique=true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phone;
 
     @Column(nullable = false)
     private String address;
 
-    @Convert(converter = PasswordConverter.class)
     @Column(nullable = false)
-    private String password;
+    private String passwordHash;
 
+    @Column(nullable = false)
+    private String salt;
 
     @Column(nullable = false)
     private boolean isAdmin;
@@ -47,19 +49,20 @@ public class User {
     public User(String name, String email, String password, String phone, String address, boolean isAdmin) {
         this.name = name;
         this.email = email;
-        this.password = password;
         this.phone = phone;
         this.address = address;
         this.isAdmin = isAdmin;
+        this.salt = PasswordUtil.generateSalt();
+        this.passwordHash = PasswordUtil.hashPassword(password, this.salt);
     }
 
     // Getters and Setters
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -79,12 +82,17 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.salt = PasswordUtil.generateSalt();
+        this.passwordHash = PasswordUtil.hashPassword(password, this.salt);
+    }
+
+    public String getSalt() {
+        return salt;
     }
 
     public String getPhone() {
@@ -94,7 +102,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
     public String getAddress() {
         return address;
@@ -118,7 +125,8 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", salt='" + salt + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", isAdmin=" + isAdmin +

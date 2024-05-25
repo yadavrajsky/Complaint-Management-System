@@ -3,6 +3,7 @@ package com.example.servlet;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.model.Complain;
 import com.example.model.Permission;
@@ -11,7 +12,6 @@ import com.example.model.User;
 import com.example.model.UserRole;
 import com.example.service.ComplainService;
 import com.example.service.PermissionService;
-import com.example.service.RoleService;
 import com.example.service.UserRoleService;
 import com.example.service.UserService;
 
@@ -21,33 +21,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "ComplainServlet", value = "/manage_complains")
 public class ComplainServlet extends HttpServlet {
     private final UserService userService = new UserService();
     private final ComplainService complainService = new ComplainService();
     private final UserRoleService userRoleService = new UserRoleService();
-    private final RoleService roleService = new RoleService();
     private final PermissionService permissionService = new PermissionService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            User user = (User) request.getSession(false).getAttribute("loggedInUser");
-            if (user == null) {
-                request.getRequestDispatcher("/login").forward(request, response);
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("loggedInUser") == null) {
+                response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
+            User user = (User) session.getAttribute("loggedInUser");
             boolean isAdmin = user.isAdmin();
             Permission permission = getUserPermission(user);
-
+            request.setAttribute("permission", permission);
             String action = request.getParameter("action");
 
             if (action != null) {
                 switch (action) {
                     case "create":
-                        if (isAdmin || permission.canCreate()) {
+                        if (isAdmin || permission == null || permission.canCreate()) {
                             handleCreateComplain(request, response);
                         } else {
                             response.sendError(HttpServletResponse.SC_FORBIDDEN,
@@ -129,19 +130,38 @@ public class ComplainServlet extends HttpServlet {
             throws ServletException, IOException {
         String complainType = request.getParameter("complainType");
         String complainDescription = request.getParameter("complainDescription");
+        if (complainType == null || complainType.isEmpty()) {
+            request.setAttribute("errorMessage", "Complain type is required.");
+            doGet(request, response);
+            return;
+        } else if (complainDescription == null || complainDescription.isEmpty()) {
+            request.setAttribute("errorMessage", "Complain description is required.");
+            doGet(request, response);
+            return;
+        }
+
         LocalDateTime createdDateTime = LocalDateTime.now();
+        Permission permission = (Permission) request.getAttribute("permission");
+        // Get the logged-in user
         User createdByUser = (User) request.getSession().getAttribute("loggedInUser");
-        String createdForuserId = request.getParameter("createdForUserId");
+        UUID createdForuserId = null;
         User createdForUser = null;
-        if (createdByUser.isAdmin()) {
-            createdForUser = userService.findUserById(Long.valueOf(createdForuserId));
-            if (createdForUser == null) {
+        if (permission != null && (permission.canCreate() || createdByUser.isAdmin())) {
+            // Check if the user ID is valid (UUID)
+            createdForuserId = UUID.fromString(request.getParameter("createdForUserId"));
+            if (createdForuserId == null) {
                 request.setAttribute("errorMessage", "Invalid user.");
                 doGet(request, response);
                 return;
             }
         } else {
-            createdForUser = createdByUser;
+            createdForuserId = createdByUser.getId();
+        }
+        createdForUser = userService.findUserById(createdForuserId);
+        if (createdForUser == null) {
+            request.setAttribute("errorMessage", "Invalid user.");
+            doGet(request, response);
+            return;
         }
 
         Complain complain = new Complain(complainType, complainDescription, createdByUser, createdDateTime, null,
@@ -152,44 +172,42 @@ public class ComplainServlet extends HttpServlet {
     }
 
     private void handleUpdateComplain(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-Long complainId = Long.valueOf(request.getParameter("complainId"));
-String complainType = request.getParameter("complainType");
-String complainDescription = request.getParameter("complainDescription");
-String status = request.getParameter("status");
-String assignUserIdParam = request.getParameter("assignUserId");
+            throws ServletException, IOException {
+        UUID complainId = UUID.fromString(request.getParameter("complainId"));
+        String complainType = request.getParameter("complainType");
+        String complainDescription = request.getParameter("complainDescription");
+        String status = request.getParameter("status");
+        UUID assignUserId = UUID.fromString(request.getParameter("assignUserId"));
 
-Complain complain = complainService.findComplainById(complainId);
-if (complain != null) {
-    complain.setComplainType(complainType);
-    complain.setComplainDescription(complainDescription);
-    complain.setStatus(status);
+        Complain complain = complainService.findComplainById(complainId);
+        if (complain != null) {
+            complain.setComplainType(complainType);
+            complain.setComplainDescription(complainDescription);
+            complain.setStatus(status);
 
-    if (assignUserIdParam != null && !assignUserIdParam.isEmpty()) {
-        Long assignUserId = Long.valueOf(assignUserIdParam);
-        User assignedUser = new UserService().findUserById(assignUserId);
-        if (assignedUser != null) {
-            complain.setAssignedTo(assignedUser);
+            if (assignUserId != null && !assignUserId.toString().isEmpty()) {
+                User assignedUser = new UserService().findUserById(assignUserId);
+                if (assignedUser != null) {
+                    complain.setAssignedTo(assignedUser);
+                } else {
+                    request.setAttribute("errorMessage", "Assigned User not found.");
+                    doGet(request, response);
+                    return;
+                }
+            }
+
+            complainService.updateComplain(complain);
+            request.setAttribute("successMessage", "Complain updated successfully.");
         } else {
-            request.setAttribute("errorMessage", "Assigned User not found.");
-            doGet(request, response);
-            return;
+            request.setAttribute("errorMessage", "Complain not found.");
         }
+        doGet(request, response);
     }
-
-    complainService.updateComplain(complain);
-    request.setAttribute("successMessage", "Complain updated successfully.");
-} else {
-    request.setAttribute("errorMessage", "Complain not found.");
-}
-doGet(request, response);
-}
-
 
     private void handleAssignComplain(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long complainId = Long.valueOf(request.getParameter("complainId"));
-        Long assignUserId = Long.valueOf(request.getParameter("assignUserId"));
+        UUID complainId = UUID.fromString(request.getParameter("complainId"));
+        UUID assignUserId = UUID.fromString(request.getParameter("assignUserId"));
 
         Complain complain = complainService.findComplainById(complainId);
         User assignedUser = new UserService().findUserById(assignUserId);
@@ -206,7 +224,8 @@ doGet(request, response);
 
     private void handleDeleteComplain(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long complainId = Long.valueOf(request.getParameter("complainId"));
+        UUID complainId = UUID.fromString(request.getParameter("complainId"));
+
         Complain complain = complainService.findComplainById(complainId);
         if (complain != null) {
             complainService.deleteComplain(complain);

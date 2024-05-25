@@ -9,7 +9,8 @@ public class AuthenticateUtil {
         // Example: Check against database using UserService
         UserService userService = new UserService();
         User user = userService.findUserByEmail(email);
-         if(user != null && user.getPassword().equals(PasswordConverter.hashPassword(password)))
+
+         if(user != null && PasswordUtil.verifyPassword(password, user.getSalt(), user.getPasswordHash()))
         	 return user; 
          else 
         	 return null;

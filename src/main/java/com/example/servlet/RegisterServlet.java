@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
@@ -67,7 +68,8 @@ public class RegisterServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Check if user is already authenticated
-		if (request.getSession(false).getAttribute("loggedInUser") != null) {
+		HttpSession session=request.getSession(false);
+		if (session!=null && session.getAttribute("loggedInUser") != null) {
 			// Redirect to dashboard
 			response.sendRedirect(request.getContextPath() + "/manage_complains");
 			return;

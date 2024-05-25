@@ -1,6 +1,7 @@
 package com.example.servlet;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import com.example.model.Role;
 import com.example.model.User;
@@ -49,7 +50,8 @@ public class RoleServlet extends HttpServlet {
 
     private void handleDeleteRole(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long roleId = Long.valueOf(request.getParameter("roleId"));
+        UUID roleId = UUID.fromString(request.getParameter("roleId"));
+
         Role role = roleService.findRoleById(roleId);
         if (role != null) {
             roleService.deleteRole(role);
@@ -62,8 +64,8 @@ public class RoleServlet extends HttpServlet {
 
     private void handleEditRole(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Long roleId = Long.valueOf(request.getParameter("roleId"));
-        String newRoleName = request.getParameter("role");
+                UUID roleId = UUID.fromString(request.getParameter("roleId"));
+                String newRoleName = request.getParameter("role");
         Role role = roleService.findRoleById(roleId);
         if (role != null) {
             role.setRole(newRoleName);

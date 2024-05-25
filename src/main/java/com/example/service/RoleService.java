@@ -1,13 +1,14 @@
 package com.example.service;
 
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import java.util.UUID;
 
 import com.example.model.Role;
 import com.example.util.JPAUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class RoleService {
 
@@ -28,7 +29,7 @@ public class RoleService {
         }
     }
 
-    public Role findRoleById(Long id) {
+    public Role findRoleById(UUID id) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             return entityManager.find(Role.class, id);

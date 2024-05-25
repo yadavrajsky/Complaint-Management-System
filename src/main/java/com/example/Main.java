@@ -9,10 +9,10 @@ public class Main {
         UserService userService = new UserService();
         
         // Create a fake user
-        User fakeUser = new User("Fake User", "fake@example.com", "fakepassword", "1234567890", "Fake Address", false);
+        User adminUser = new User("Admin User", "admin@email.com", "Pass@123", "8954524524", "Vrindavan", true);
         
-        userService.registerUser(fakeUser);
+        userService.registerUser(adminUser);
         
-        System.out.println("Fake user registered successfully.");
+        System.out.println("Admin user registered successfully.");
     }
 }

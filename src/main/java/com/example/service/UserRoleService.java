@@ -1,13 +1,14 @@
 package com.example.service;
 
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import java.util.UUID;
 
 import com.example.model.UserRole;
 import com.example.util.JPAUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class UserRoleService {
 
@@ -28,7 +29,7 @@ public class UserRoleService {
         }
     }
 
-    public UserRole findUserRoleByUserIdAndRoleId(Long userId, Long roleId) {
+    public UserRole findUserRoleByUserIdAndRoleId(UUID userId, UUID roleId) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             String jpql = "SELECT ur FROM UserRole ur WHERE ur.user.id = :userId AND ur.role.id = :roleId";
@@ -59,7 +60,7 @@ public class UserRoleService {
         }
     }
 
-  public UserRole findUserRoleByUserId(Long userId) {
+  public UserRole findUserRoleByUserId(UUID userId) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             String jpql = "SELECT ur FROM UserRole ur WHERE ur.user.id = :userId";

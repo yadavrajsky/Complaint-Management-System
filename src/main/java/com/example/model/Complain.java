@@ -1,22 +1,24 @@
 package com.example.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "complains")
 public class Complain {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(nullable = false)
     private String complainType;
@@ -49,7 +51,7 @@ public class Complain {
 
     // Constructor with all fields
     public Complain(String complainType, String complainDescription, User createdByUser,
-            LocalDateTime createdOnDateTime, User assignedTo, String status, User createdForUser) {
+                    LocalDateTime createdOnDateTime, User assignedTo, String status, User createdForUser) {
         this.complainType = complainType;
         this.complainDescription = complainDescription;
         this.createdByUser = createdByUser;
@@ -58,21 +60,14 @@ public class Complain {
         this.status = status;
         this.createdForUser = createdForUser;
     }
+
     // Getters and Setters
 
-    public User getCreatedForUser() {
-        return createdForUser;
-    }
-
-    public void setCreatedForUser(User createdForUser) {
-        this.createdForUser = createdForUser;
-    }
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -122,6 +117,14 @@ public class Complain {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public User getCreatedForUser() {
+        return createdForUser;
+    }
+
+    public void setCreatedForUser(User createdForUser) {
+        this.createdForUser = createdForUser;
     }
 
     @Override

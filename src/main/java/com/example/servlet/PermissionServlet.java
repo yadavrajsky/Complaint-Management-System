@@ -2,6 +2,7 @@ package com.example.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.model.Permission;
 import com.example.model.Role;
@@ -99,12 +100,11 @@ public class PermissionServlet extends HttpServlet {
     private void handleCreatePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Long roleId = Long.valueOf(request.getParameter("roleId"));
+            UUID roleId = UUID.fromString(request.getParameter("roleId"));
             boolean canView = Boolean.parseBoolean(request.getParameter("canView"));
             boolean canCreate = Boolean.parseBoolean(request.getParameter("canCreate"));
             boolean canUpdate = Boolean.parseBoolean(request.getParameter("canUpdate"));
             boolean canDelete = Boolean.parseBoolean(request.getParameter("canDelete"));
-
             Role role = roleService.findRoleById(roleId);
 
             if (role != null) {
@@ -122,7 +122,7 @@ public class PermissionServlet extends HttpServlet {
     private void handleUpdatePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Long roleId = Long.valueOf(request.getParameter("roleId"));
+            UUID roleId = UUID.fromString(request.getParameter("roleId"));
             boolean canView = request.getParameter("canView") != null;
             boolean canCreate = request.getParameter("canCreate") != null;
             boolean canUpdate = request.getParameter("canUpdate") != null;
@@ -149,7 +149,7 @@ public class PermissionServlet extends HttpServlet {
     private void handleDeletePermission(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Long roleId = Long.valueOf(request.getParameter("roleId"));
+            UUID roleId = UUID.fromString(request.getParameter("roleId"));
             Permission permission = permissionService.findPermissionByRoleId(roleId);
 
             if (permission != null) {

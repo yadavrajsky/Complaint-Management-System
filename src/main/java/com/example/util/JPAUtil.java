@@ -1,7 +1,7 @@
 package com.example.util;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class JPAUtil {
     private static final String PERSISTENCE_UNIT_NAME = "complaints-management";

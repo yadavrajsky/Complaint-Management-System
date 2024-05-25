@@ -1,14 +1,15 @@
 package com.example.service;
 
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import java.util.UUID;
 
 import com.example.model.Complain;
 import com.example.model.User;
 import com.example.util.JPAUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class ComplainService {
 
@@ -23,18 +24,18 @@ public class ComplainService {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            // e.printStackTrace();
+            e.printStackTrace();
         } finally {
             entityManager.close();
         }
     }
 
-    public Complain findComplainById(Long id) {
+    public Complain findComplainById(UUID id) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             return entityManager.find(Complain.class, id);
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return null;
         } finally {
             entityManager.close();
@@ -48,7 +49,7 @@ public class ComplainService {
             TypedQuery<Complain> query = entityManager.createQuery(jpql, Complain.class);
             return query.getResultList();
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return null;
         } finally {
             entityManager.close();
@@ -66,7 +67,7 @@ public class ComplainService {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            // e.printStackTrace();
+            e.printStackTrace();
         } finally {
             entityManager.close();
         }
@@ -83,13 +84,13 @@ public class ComplainService {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            // e.printStackTrace();
+            e.printStackTrace();
         } finally {
             entityManager.close();
         }
     }
 
-    public List<Complain> findComplainsByUserId(Long userId) {
+    public List<Complain> findComplainsByUserId(UUID userId) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             String jpql = "SELECT c FROM Complain c WHERE c.createdByUser.id = :userId";
@@ -97,14 +98,14 @@ public class ComplainService {
             query.setParameter("userId", userId);
             return query.getResultList();
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return null;
         } finally {
             entityManager.close();
         }
     }
 
-    public List<Complain> findComplainsCreatedByUserId(Long userId) {
+    public List<Complain> findComplainsCreatedByUserId(UUID userId) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             String jpql = "SELECT c FROM Complain c WHERE c.createdForUser.id = :userId";
@@ -112,14 +113,14 @@ public class ComplainService {
             query.setParameter("userId", userId);
             return query.getResultList();
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return null;
         } finally {
             entityManager.close();
         }
     }
 
-    public List<Complain> findComplainsAssignedToUserId(Long userId) {
+    public List<Complain> findComplainsAssignedToUserId(UUID userId) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             String jpql = "SELECT c FROM Complain c WHERE c.assignedTo.id = :userId";
@@ -127,7 +128,7 @@ public class ComplainService {
             query.setParameter("userId", userId);
             return query.getResultList();
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return null;
         } finally {
             entityManager.close();
@@ -146,7 +147,7 @@ public class ComplainService {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            // e.printStackTrace();
+            e.printStackTrace();
         } finally {
             entityManager.close();
         }

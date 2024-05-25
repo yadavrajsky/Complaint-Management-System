@@ -43,9 +43,12 @@ Our Complaint Management System allows users to submit complaints, which are the
 mvn clean install
 ```
 
-4. **🚀 Deploy to Tomcat & Start the Tomcat server**:
+4. **👑 Make Admin User**:
+   - Run `Main.java` first to create the admin user 
 
-5. **🌐 Access the Application**:
+5. **🚀 Deploy to Tomcat & Start the Tomcat server**:
+
+6. **🌐 Access the Application**:
    - Open your browser and navigate to [Complaint Management System](http://localhost:8080/complaint-management-system).
 
 ## 🛠️ Usage

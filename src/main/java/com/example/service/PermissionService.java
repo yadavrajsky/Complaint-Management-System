@@ -1,13 +1,14 @@
 package com.example.service;
 
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import java.util.UUID;
 
 import com.example.model.Permission;
 import com.example.util.JPAUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class PermissionService {
 
@@ -29,7 +30,7 @@ public class PermissionService {
         }
     }
 
-    public Permission findPermissionByRoleId(Long roleId) {
+    public Permission findPermissionByRoleId(UUID roleId) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             String jpql = "SELECT p FROM Permission p WHERE p.role.id = :roleId";
