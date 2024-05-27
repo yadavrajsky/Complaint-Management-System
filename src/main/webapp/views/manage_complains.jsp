@@ -16,15 +16,16 @@
 
     <%
     User user = (User) request.getSession().getAttribute("loggedInUser");
-    boolean isAdmin = user != null && user.isAdmin();
+    boolean isAdmin = (user != null && user.isAdmin());
     Permission permission = (Permission) request.getAttribute("permission");
     %>
 
     <!-- Create Complaint Form -->
- 
+        
+
 
             <%
-            if (isAdmin || (permission == null || permission.canCreate())) {
+            if (isAdmin || permission == null || permission.canCreate()) {
             %>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-semibold mb-4">Create Complaint</h2>

@@ -56,7 +56,7 @@ public class ComplainServlet extends HttpServlet {
                         }
                         break;
                     case "update":
-                        if (isAdmin || permission.canUpdate()) {
+                        if (isAdmin || (permission!=null && permission.canUpdate())) {
                             handleUpdateComplain(request, response);
                         } else {
                             response.sendError(HttpServletResponse.SC_FORBIDDEN,
@@ -72,7 +72,7 @@ public class ComplainServlet extends HttpServlet {
                         }
                         break;
                     case "delete":
-                        if (isAdmin || permission.canDelete()) {
+                        if (isAdmin || (permission!=null && permission.canDelete())) {
                             handleDeleteComplain(request, response);
                         } else {
                             response.sendError(HttpServletResponse.SC_FORBIDDEN,
@@ -104,10 +104,9 @@ public class ComplainServlet extends HttpServlet {
             }
             boolean isAdmin = user.isAdmin();
             Permission permission = getUserPermission(user);
-
             if (isAdmin)
                 complains = complainService.findAllComplains();
-            else if (permission.canView())
+            else if (permission!=null && permission.canView())
                 complains = complainService.findComplainsAssignedToUserId(user.getId());
             else
                 complains = complainService.findComplainsCreatedByUserId(user.getId());
@@ -242,6 +241,6 @@ public class ComplainServlet extends HttpServlet {
             Role role = userRole.getRole();
             return permissionService.findPermissionByRoleId(role.getId());
         }
-        return new Permission(null, false, false, false, false); // default permission if none found
+        return null; // default permission if none found
     }
 }

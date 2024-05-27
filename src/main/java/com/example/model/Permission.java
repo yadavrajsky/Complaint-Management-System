@@ -85,4 +85,17 @@ public class Permission {
     public void setCanDelete(boolean canDelete) {
         this.canDelete = canDelete;
     }
+
+    // toString
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "id=" + id +
+                ", role=" + role +
+                ", canView=" + canView +
+                ", canCreate=" + canCreate +
+                ", canUpdate=" + canUpdate +
+                ", canDelete=" + canDelete +
+                '}';
+    }
 }
