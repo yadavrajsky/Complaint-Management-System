@@ -102,14 +102,16 @@ public class ComplainServlet extends HttpServlet {
                 request.getRequestDispatcher("/login").forward(request, response);
                 return;
             }
+        String  searchQuery = request.getParameter("search");
+
             boolean isAdmin = user.isAdmin();
             Permission permission = getUserPermission(user);
             if (isAdmin)
-                complains = complainService.findAllComplains();
+                complains = complainService.findAllComplains(searchQuery);
             else if (permission!=null && permission.canView())
-                complains = complainService.findComplainsAssignedToUserId(user.getId());
+                complains = complainService.findComplainsAssignedToUserId(user.getId(), searchQuery);
             else
-                complains = complainService.findComplainsCreatedByUserId(user.getId());
+                complains = complainService.findComplainsCreatedByUserId(user.getId(), searchQuery);
             request.setAttribute("complains", complains);
             request.setAttribute("permission", permission);
             request.setAttribute("title", "Manage Complains");

@@ -66,6 +66,19 @@
     <!-- Complaints List -->
     <div class="bg-white p-6 rounded-lg shadow-md mt-6 overflow-y-auto">
         <h2 class="text-xl font-semibold mb-4">Existing Complaints</h2>
+        <!-- SearchBar using tailwind  -->
+
+        <div class="flex justify-between mb-4">
+            <div class="relative w-full">
+                <input type="text" class="w-full border border-gray-300 rounded-md p-2" 
+       value='<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>' 
+       id="searchInput" 
+       placeholder="Search Complain by type or desc">
+
+                <a id="searchButton" class="absolute right-0 top-0 bottom-0 px-4 py-2 bg-blue-500 text-white rounded-md" href='<%= "?pageNumber=" + ((request.getParameter("pageNumber") != null) ? Integer.parseInt(request.getParameter("pageNumber")) : 1) %>' onclick="searchComplaints()">Search</a>
+            </div>
+            </div>
+
         <table class="min-w-full divide-y divide-gray-200 table-responsiveness">
             <thead class="bg-gray-50">
                 <tr>
@@ -172,6 +185,35 @@
                 %>
             </tbody>
         </table>
+
+    <!-- Pagination -->
+    <div class="flex justify-end mb-4">
+        <% if ( complains!=null && !complains.isEmpty()) { %>
+            <% int pageSize = 10;
+               int currentPage = (request.getParameter("pageNumber") != null) ? Integer.parseInt(request.getParameter("pageNumber")) : 1;
+               int totalPages = (complains.size() + pageSize - 1) / pageSize;
+            %>
+            <div class="space-x-2">
+                <% if (currentPage != 1) { %>
+                    <a href="?pageNumber=1" class="text-blue-500">First</a>
+                    <a href="?pageNumber=<%=currentPage - 1%>" class="text-blue-500">Previous</a>
+                <% } %>
+                
+                <% for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++) { %>
+                    <% if (pageNumber == currentPage) { %>
+                        <span class="px-4 py-2 bg-blue-500 text-white"><%=pageNumber%></span>
+                    <% } else { %>
+                        <a href="?pageNumber=<%=pageNumber%>" class="text-blue-500"><%=pageNumber%></a>
+                    <% } %>
+                <% } %>
+                
+                <% if (currentPage != totalPages) { %>
+                    <a href="?pageNumber=<%=currentPage + 1%>" class="text-blue-500">Next</a>
+                    <a href="?pageNumber=<%=totalPages%>" class="text-blue-500">Last</a>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
     </div>
 </div>
 
@@ -267,5 +309,10 @@
         function closeAssignModal() {
             document.getElementById('assignComplainModal').classList.add('hidden');
         }
-    </script>
+        function searchComplaints() {
+        var searchValue = document.getElementById("searchInput").value.trim();
+        var currentUrl = document.getElementById("searchButton").getAttribute("href");
+        var newUrl = currentUrl + "&search=" + searchValue;
+        document.getElementById("searchButton").setAttribute("href", newUrl);
+    }
 </script>

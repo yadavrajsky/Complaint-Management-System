@@ -90,4 +90,21 @@ public class UserService {
             entityManager.close();
         }
     }
+    public void updateUser(User user) {
+        EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.merge(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            // e.printStackTrace();
+        } finally {
+            entityManager.close();
+        }
+    }
+    
 }

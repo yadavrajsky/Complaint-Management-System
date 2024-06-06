@@ -42,11 +42,20 @@ public class ComplainService {
         }
     }
 
-    public List<Complain> findAllComplains() {
+    public List<Complain> findAllComplains(String searchQuery) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
-            String jpql = "SELECT c FROM Complain c";
-            TypedQuery<Complain> query = entityManager.createQuery(jpql, Complain.class);
+            TypedQuery<Complain> query = null;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String jpql = "SELECT c FROM Complain c WHERE c.complainType LIKE :searchQuery OR c.complainDescription LIKE :searchQuery";
+                query = entityManager.createQuery(jpql, Complain.class);
+                query.setParameter("searchQuery", "%" + searchQuery + "%");
+            }
+            else 
+            {
+                String jpql = "SELECT c FROM Complain c";
+                query = entityManager.createQuery(jpql, Complain.class);
+            }
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,11 +99,21 @@ public class ComplainService {
         }
     }
 
-    public List<Complain> findComplainsByUserId(UUID userId) {
+    public List<Complain> findComplainsByUserId(UUID userId, String searchQuery) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
-            String jpql = "SELECT c FROM Complain c WHERE c.createdByUser.id = :userId";
-            TypedQuery<Complain> query = entityManager.createQuery(jpql, Complain.class);
+            TypedQuery<Complain> query = null;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String jpql = "SELECT c FROM Complain c WHERE c.createdByUser.id = :userId AND (c.complainType LIKE :searchQuery OR c.complainDescription LIKE :searchQuery)";
+                query = entityManager.createQuery(jpql, Complain.class);
+                query.setParameter("searchQuery", "%" + searchQuery + "%");
+            }
+            else 
+            {
+                String jpql = "SELECT c FROM Complain c WHERE c.createdByUser.id = :userId";
+                query = entityManager.createQuery(jpql, Complain.class);
+
+            }
             query.setParameter("userId", userId);
             return query.getResultList();
         } catch (Exception e) {
@@ -105,11 +124,18 @@ public class ComplainService {
         }
     }
 
-    public List<Complain> findComplainsCreatedByUserId(UUID userId) {
+    public List<Complain> findComplainsCreatedByUserId(UUID userId, String searchQuery) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
-            String jpql = "SELECT c FROM Complain c WHERE c.createdForUser.id = :userId";
-            TypedQuery<Complain> query = entityManager.createQuery(jpql, Complain.class);
+            TypedQuery<Complain> query = null;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String jpql = "SELECT c FROM Complain c WHERE c.createdForUser.id = :userId AND (c.complainType LIKE :searchQuery OR c.complainDescription LIKE :searchQuery)";
+                query = entityManager.createQuery(jpql, Complain.class);
+                query.setParameter("searchQuery", "%" + searchQuery + "%");
+            } else {
+                String jpql = "SELECT c FROM Complain c WHERE c.createdForUser.id = :userId";
+                query = entityManager.createQuery(jpql, Complain.class);
+            }
             query.setParameter("userId", userId);
             return query.getResultList();
         } catch (Exception e) {
@@ -120,11 +146,18 @@ public class ComplainService {
         }
     }
 
-    public List<Complain> findComplainsAssignedToUserId(UUID userId) {
+    public List<Complain> findComplainsAssignedToUserId(UUID userId, String searchQuery) {
         EntityManager entityManager = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
-            String jpql = "SELECT c FROM Complain c WHERE c.assignedTo.id = :userId";
-            TypedQuery<Complain> query = entityManager.createQuery(jpql, Complain.class);
+            TypedQuery<Complain> query = null;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String jpql = "SELECT c FROM Complain c WHERE c.assignedTo.id = :userId AND (c.complainType LIKE :searchQuery OR c.complainDescription LIKE :searchQuery)";
+                query = entityManager.createQuery(jpql, Complain.class);
+                query.setParameter("searchQuery", "%" + searchQuery + "%");
+            } else {
+                String jpql = "SELECT c FROM Complain c WHERE c.assignedTo.id = :userId";
+                query = entityManager.createQuery(jpql, Complain.class);
+            }
             query.setParameter("userId", userId);
             return query.getResultList();
         } catch (Exception e) {

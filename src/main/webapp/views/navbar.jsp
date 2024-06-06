@@ -56,7 +56,9 @@
                             <% } %>
                         </div>
                         <ul class="py-2" aria-labelledby="user-menu-button">
-                            <li class="text-center"><a href="logout"
+                            <li class="text-center"><a href="update_profile" class="block px-4 py-2 text-sm text-white hover:bg-gray-100 hover:text-gray-900">Profile Settings</a>
+                            </li>
+                                <li class="text-center"><a href="logout"
                                    class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-100 hover:text-gray-900 ">Sign out</a></li>
                         </ul>
                     </div>
